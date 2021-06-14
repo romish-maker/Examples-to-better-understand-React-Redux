@@ -26,7 +26,6 @@ export function Accordion(props: AccordionPropsType) {
             changeState={props.changeState}/>
 
         {!props.collapsed && <AccordionBody items={props.items} onClick={props.onClick}
-
         />}
     </div>
 }
@@ -39,7 +38,7 @@ type AccordionTitlePropsType = {
 function AccordionTitle(props: AccordionTitlePropsType) {
     console.log("AccordionTitle rendering")
     return (
-        <><h3 onClick={(e) => {
+        <><h3 onClick={() => {
             props.changeState()
         }}>{props.title}</h3></>
     );
