@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 
 export default {
     title: 'use.memo demo'
@@ -14,9 +14,9 @@ export const DifficultCountingExample = () => {
 
     resultA = useMemo(() => {
         let tempResultA = 1;
-        for(let i = 1; i <= a; i++) {
+        for (let i = 1; i <= a; i++) {
             let fake = 0
-            while(fake < 100000000) {
+            while (fake < 100000000) {
                 fake++
                 const fakeValue = Math.random()
             }
@@ -25,13 +25,13 @@ export const DifficultCountingExample = () => {
         return tempResultA
     }, [a])
 
-    for(let i = 1; i <= b; i++) {
+    for (let i = 1; i <= b; i++) {
         resultB = resultB * i
     }
 
     return <>
-        <input value={a} onChange={ (e) => setA(+e.currentTarget.value)} />
-        <input value={b} onChange={ (e) => setB(+e.currentTarget.value)} />
+        <input value={a} onChange={(e) => setA(+e.currentTarget.value)}/>
+        <input value={b} onChange={(e) => setB(+e.currentTarget.value)}/>
         <hr/>
         <div>
             Result for a: {resultA}
@@ -39,7 +39,7 @@ export const DifficultCountingExample = () => {
         <div>
             Result for b: {resultB}
         </div>
-        </>
+    </>
 }
 
 export const HelpsForReactMemoExample = () => {
@@ -51,9 +51,9 @@ export const HelpsForReactMemoExample = () => {
 
     resultA = useMemo(() => {
         let tempResultA = 1;
-        for(let i = 1; i <= a; i++) {
+        for (let i = 1; i <= a; i++) {
             let fake = 0
-            while(fake < 100000000) {
+            while (fake < 100000000) {
                 fake++
                 const fakeValue = Math.random()
             }
@@ -62,13 +62,13 @@ export const HelpsForReactMemoExample = () => {
         return tempResultA
     }, [a])
 
-    for(let i = 1; i <= b; i++) {
+    for (let i = 1; i <= b; i++) {
         resultB = resultB * i
     }
 
     return <>
-        <input value={a} onChange={ (e) => setA(+e.currentTarget.value)} />
-        <input value={b} onChange={ (e) => setB(+e.currentTarget.value)} />
+        <input value={a} onChange={(e) => setA(+e.currentTarget.value)}/>
+        <input value={b} onChange={(e) => setB(+e.currentTarget.value)}/>
         <hr/>
         <div>
             Result for a: {resultA}
@@ -95,8 +95,8 @@ const Users = React.memo(UsersSecret)
 
 export const HelpsForReactMemo = () => {
     console.log("HelpsForReactMemo")
-    const [count,setCount] = useState(0)
-    const [users,setUsers] = useState(['Romish', 'Beha', 'Rama'])
+    const [count, setCount] = useState(0)
+    const [users, setUsers] = useState(['Romish', 'Beha', 'Rama'])
     const newArray = useMemo(() => {
         return users.filter(u => u.toLowerCase().indexOf("a") > -1)
     }, [users])
@@ -115,3 +115,43 @@ export const HelpsForReactMemo = () => {
         </>
     )
 }
+export const LikeUseCallBack = () => {
+    console.log("LikeUseCallBack")
+    const [count, setCount] = useState(0)
+    const [books, setBooks] = useState(['React', 'JS', 'CSS', 'HTML'])
+
+
+    const memoizedAddBook = useMemo(() => {
+        return () => {
+            console.log(books)
+            const copyUser = [...books, 'Angular ' + new Date().getTime()]
+            setBooks(copyUser)
+        }
+    }, [books])
+
+    const memoizedAddBook2 = useCallback(() => {
+        console.log(books)
+        const copyUser = [...books, 'Angular ' + new Date().getTime()]
+        setBooks(copyUser)
+    }, [books])
+
+    return (
+        <>
+            <button onClick={() => setCount(count + 1)}>+</button>
+            <NewMessageCounter count={count}/>
+            <Book addBook={memoizedAddBook2}/>
+        </>
+    )
+}
+
+type BookSecretPropsType = {
+    addBook: () => void
+}
+const BooksSecret = (props: BookSecretPropsType) => {
+    console.log("BooksSecret");
+    return <div>
+        <button onClick={props.addBook}>addBook</button>
+    </div>
+}
+const Book = React.memo(BooksSecret)
+
